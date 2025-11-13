@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>limViz — Contact</title>
+  <meta name="description" content="Contact limViz for 3D visualization quotes, collaboration, and support." />
+  <link rel="stylesheet" href="./css/pricing.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="./pricing.html">limViz</a>
+      <nav aria-label="Primary">
+        <a href="./contact.html" class="active">Contact</a>
+        <a href="./pricing.html">Pricing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Contact limViz</h1>
+      <p>For quotes, availability, or general enquiries — drop us a message and we'll get back within 1–2 business days.</p>
+    </section>
+
+    <section style="margin-top:18px; display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+      <div style="background:rgba(255,255,255,0.02); padding:18px; border-radius:10px;">
+        <h2>Quick contact</h2>
+        <p style="color:var(--muted)">Email</p>
+        <p><a href="mailto:hello@idearc.so">hello@idearc.so</a></p>
+
+        <p style="color:var(--muted); margin-top:10px;">Business hours</p>
+        <p>Mon–Fri, 09:00–18:00 (local)</p>
+
+        <p style="color:var(--muted); margin-top:10px;">Other</p>
+        <ul style="padding-left:18px; color:var(--muted); margin:6px 0 0;">
+          <li>Link to portfolio, repo or socials</li>
+        </ul>
+      </div>
+
+      <div style="background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:18px; border-radius:10px;">
+        <h2>Send us a message</h2>
+        <form id="contactForm" onsubmit="return false;" aria-label="Contact form" style="display:grid; gap:10px;">
+          <label>
+            Your name
+            <input id="name" type="text" required placeholder="Your name" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit"/>
+          </label>
+          <label>
+            Your email
+            <input id="email" type="email" required placeholder="you@company.com" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit"/>
+          </label>
+          <label>
+            Subject
+            <input id="subject" type="text" placeholder="Project: exterior renders" style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit"/>
+          </label>
+          <label>
+            Message
+            <textarea id="message" rows="5" required placeholder="Brief project description, files available, deadline..." style="width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit"></textarea>
+          </label>
+
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="sendBtn" class="btn">Send email</button>
+            <button id="copyBtn" class="btn secondary" type="button">Copy message</button>
+            <small style="color:var(--muted); margin-left:auto;">Or email: <a href="mailto:hello@idearc.so">hello@idearc.so</a></small>
+          </div>
+
+          <p id="status" style="color:var(--muted); margin:6px 0 0;"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="faq" style="margin-top:18px;">
+      <h2>Privacy & attachments</h2>
+      <p style="color:var(--muted)">This form opens your mail client and does not upload attachments to this site. If you need to send large files, please share a link (Dropbox/Drive) in your message.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© IDEArcSoftware — limViz 3D Visualization Services</p>
+      <p><a href="mailto:hello@idearc.so">hello@idearc.so</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const sendBtn = document.getElementById('sendBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const status = document.getElementById('status');
+
+      function encodeMailto(to, subject, body) {
+        return 'mailto:' + encodeURIComponent(to)
+          + '?subject=' + encodeURIComponent(subject)
+          + '&body=' + encodeURIComponent(body);
+      }
+
+      sendBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim() || 'limViz inquiry';
+        const message = document.getElementById('message').value.trim();
+
+        if(!name || !email || !message){
+          status.textContent = 'Please fill name, email and message.';
+          return;
+        }
+
+        const bodyLines = [
+          `Name: ${name}`,
+          `Email: ${email}`,
+          '',
+          message,
+          '',
+          '---',
+          'Please attach links to files or references if available.'
+        ];
+        const body = bodyLines.join('\n');
+
+        // open user mail client
+        window.location.href = encodeMailto('hello@idearc.so', subject, body);
+        status.textContent = 'Opening your email client…';
+      });
+
+      copyBtn.addEventListener('click', function(){
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim() || 'limViz inquiry';
+        const message = document.getElementById('message').value.trim();
+        const text = `Subject: ${subject}\nName: ${name}\nEmail: ${email}\n\n${message}`;
+        if(navigator.clipboard){
+          navigator.clipboard.writeText(text).then(()=>{
+            status.textContent = 'Message copied to clipboard — paste into an email.';
+            setTimeout(()=> status.textContent = '', 3000);
+          });
+        } else {
+          alert(text);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
