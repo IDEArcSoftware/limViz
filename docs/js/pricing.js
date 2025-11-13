@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // For stills: price scales roughly linearly with qty.
     // For animations (if qty > 6 treat as minutes), we let base represent a package and scale.
     let subtotal = base * Math.min(qty, 1) + (base * 0.6 * (qty - 1));
-    if(qty > 6){ // animations / large jobs
+    if(qty > 3){ // animations / large jobs
       subtotal = base * 0.9 * qty;
     }
     // extra revisions
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(rushInput.checked) subtotal *= 1.3;
     subtotal = Math.round(subtotal);
     estimateAmount.textContent = formatEUR(subtotal);
-    mailtoLink.href = `mailto:hello@idearc.so?subject=limViz%20estimate%20request&body=${encodeURIComponent(
+    mailtoLink.href = `mailto:software@idearc.com.tr?subject=limViz%20estimate%20request&body=${encodeURIComponent(
       `I'm interested in the ${tier} tier.\nQuantity: ${qty}\nRush: ${rushInput.checked ? 'Yes' : 'No'}\nExtra revisions: ${revsInput.value}\nEstimated total: €${subtotal}`
     )}`;
   }
@@ -67,13 +67,13 @@ document.addEventListener('DOMContentLoaded', function(){
       const tier = btn.dataset.tier || 'Standard';
       const subject = encodeURIComponent(`Request: limViz ${tier} package`);
       const body = encodeURIComponent(`Hi,\n\nI'd like a quote for the ${tier} package.\nPlease advise next steps and lead time.\n\nThanks.`);
-      window.location.href = `mailto:hello@idearc.so?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:software@idearc.com.tr?subject=${subject}&body=${body}`;
     });
   });
 
   copyBtn.addEventListener('click', (e)=>{
     e.preventDefault();
-    const text = `Estimated price: ${estimateAmount.textContent}\nContact: hello@idearc.so`;
+    const text = `Estimated price: ${estimateAmount.textContent}\nContact: software@idearc.com.tr`;
     navigator.clipboard?.writeText(text).then(()=> {
       copyBtn.textContent = 'Copied';
       setTimeout(()=> copyBtn.textContent = 'Copy estimate', 1800);
