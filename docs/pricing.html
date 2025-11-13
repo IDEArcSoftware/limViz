@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>limViz — 3D Visualization Services & Pricing</title>
+  <meta name="description" content="Professional 3D visualization services: architectural renders, product visuals, animations. Clear pricing, add-ons, and inquiries." />
+  <link rel="stylesheet" href="./css/pricing.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "limViz 3D Visualization Services",
+    "description": "Architectural and product 3D renders, animations, VR-ready scenes. Tiered pricing for different deliverables.",
+    "provider": {
+      "@type": "Organization",
+      "name": "IDEArcSoftware / limViz",
+      "url": "https://github.com/IDEArcSoftware/limViz"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="/">limViz</a>
+      <nav aria-label="Primary">
+        <a href="/contact">Contact</a>
+        <a href="./pricing.html" class="active">Pricing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>3D Visualization Services Pricing</h1>
+      <p>Clear, flexible pricing for architectural renders, product visuals, and animations. Choose a tier or request a custom quote.</p>
+
+      <div class="toggle">
+        <label>
+          <input type="checkbox" id="billingToggle" />
+          Show hourly estimates
+        </label>
+      </div>
+    </section>
+
+    <section class="pricing-grid" aria-label="Pricing tiers">
+      <article class="card">
+        <h2>Basic</h2>
+        <p class="price"><span data-price-monthly="350" data-price-hourly="60">€350</span></p>
+        <ul>
+          <li>1 high-quality still render</li>
+          <li>1 revision</li>
+          <li>Standard lighting & materials</li>
+        </ul>
+        <p class="muted">Good for concept visuals and single-shot renders.</p>
+        <button class="cta" data-tier="Basic">Request Basic</button>
+      </article>
+
+      <article class="card featured">
+        <h2>Standard</h2>
+        <p class="price"><span data-price-monthly="950" data-price-hourly="95">€950</span></p>
+        <ul>
+          <li>Up to 3 still renders</li>
+          <li>2 revisions per image</li>
+          <li>Enhanced materials and lighting</li>
+        </ul>
+        <p class="muted">Ideal for marketing assets and client presentations.</p>
+        <button class="cta" data-tier="Standard">Request Standard</button>
+      </article>
+
+      <article class="card">
+        <h2>Premium</h2>
+        <p class="price"><span data-price-monthly="2200" data-price-hourly="160">€2,200</span></p>
+        <ul>
+          <li>Up to 8 still renders or short animation</li>
+          <li>Unlimited revisions within scope</li>
+          <li>Advanced post-production & compositing</li>
+        </ul>
+        <p class="muted">For campaigns, product launches, and showreels.</p>
+        <button class="cta" data-tier="Premium">Request Premium</button>
+      </article>
+    </section>
+
+    <section class="add-ons">
+      <h2>Add-ons & Custom Options</h2>
+      <ul>
+        <li>Rush delivery (48-72h): +30%</li>
+        <li>Extra revisions: €50 / revision</li>
+        <li>360° interactive viewer: from €400</li>
+        <li>Drone / aerial scene photomatching: +€150</li>
+      </ul>
+    </section>
+
+    <section class="calculator" aria-label="Price calculator">
+      <h2>Estimate your project</h2>
+      <form id="estimator" onsubmit="return false;">
+        <label>
+          Tier:
+          <select id="tierSelect">
+            <option value="Basic">Basic</option>
+            <option value="Standard" selected>Standard</option>
+            <option value="Premium">Premium</option>
+          </select>
+        </label>
+
+        <label>
+          Number of images / minutes of animation:
+          <input type="number" id="qty" value="3" min="1" />
+        </label>
+
+        <label>
+          Rush delivery:
+          <input type="checkbox" id="rush" />
+        </label>
+
+        <label>
+          Extra revisions:
+          <input type="number" id="revs" value="0" min="0" />
+        </label>
+
+        <p class="estimate">Estimated price: <strong id="estimateAmount">—</strong></p>
+
+        <div class="actions">
+          <a id="mailtoLink" class="btn secondary" href="mailto:software@idearc.com.tr?subject=limViz%20pricing%20request">Contact Sales</a>
+          <button id="copyBtn" class="btn">Copy estimate</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>How long does a project take?</summary>
+        <p>Typical delivery ranges from 3–14 working days depending on scope and revisions. Rush options available.</p>
+      </details>
+      <details>
+        <summary>What do we need to start?</summary>
+        <p>Reference images, CAD/3D files if available, dimensions, and a short brief are enough to get started.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© IDEArcSoftware — limViz 3D Visualization Services</p>
+      <p><a href="mailto:software@idearc.com.tr">software@idearc.com.tr</a></p>
+    </div>
+  </footer>
+
+  <script src="./js/pricing.js"></script>
+</body>
+</html>
