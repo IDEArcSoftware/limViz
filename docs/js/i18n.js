@@ -228,8 +228,13 @@ class I18n {
 
   detectLanguage() {
     // Check localStorage first
-    const saved = localStorage.getItem('limviz-lang');
-    if (saved && translations[saved]) return saved;
+    let saved = null;
+  try {
+    saved = localStorage.getItem('limviz-lang');
+  } catch (e) {
+    // localStorage not available, ignore
+  }
+  if (saved && translations[saved]) return saved;
     
     // Check browser language
     const browserLang = navigator.language.toLowerCase();
@@ -240,8 +245,11 @@ class I18n {
 
   detectCurrency() {
     // Check localStorage first
-    const saved = localStorage.getItem('limviz-currency');
-    if (saved && (saved === 'EUR' || saved === 'TRY')) return saved;
+    let saved = null;
+  try {
+    saved = localStorage.getItem('limviz-currency');
+  } catch (e) {}
+  if (saved && (saved === 'EUR' || saved === 'TRY')) return saved;
     
     // If Turkish language, default to TRY
     if (this.currentLang === 'tr') return 'TRY';
@@ -298,21 +306,27 @@ class I18n {
 
   setCurrency(currency) {
     if (currency !== 'EUR' && currency !== 'TRY') return;
-    
-    this.currentCurrency = currency;
+
+  this.currentCurrency = currency;
+  try {
     localStorage.setItem('limviz-currency', currency);
-    
-    // Update button states
-    document.querySelectorAll('.currency-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.currency === currency);
-    });
-    
-    this.updatePrices();
-    
-    // Trigger price recalculation if on pricing page
-    if (typeof updateEstimate === 'function') {
-      updateEstimate();
-    }
+  } catch (e) {}
+
+  document.querySelectorAll('.currency-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.currency === currency);
+  });
+
+  this.updatePrices();
+
+  // Keep your existing logic:
+  if (typeof updateEstimate === 'function') {
+    updateEstimate();
+  }
+
+  // 🔔 also emit an event if you ever need it
+  window.dispatchEvent(new CustomEvent('limviz-currency-change', {
+    detail: { currency }
+  }));
   }
 
   convertPrice(eurPrice) {
@@ -340,16 +354,22 @@ class I18n {
 
   setLanguage(lang) {
     if (!translations[lang]) return;
-    
-    this.currentLang = lang;
+
+  this.currentLang = lang;
+  try {
     localStorage.setItem('limviz-lang', lang);
-    
-    // Update button states
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-    
-    this.translate();
+  } catch (e) {}
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  this.translate();
+
+  // 🔔 notify listeners (like pricing.js)
+  window.dispatchEvent(new CustomEvent('limviz-lang-change', {
+    detail: { lang }
+  }));
   }
 
   t(key) {
@@ -423,12 +443,12 @@ const langStyles = `
 }
 `;
 
-// Initialize when DOM is ready
 if (typeof window !== 'undefined') {
-  window.i18n = new I18n();
-  
-  // Add styles to page
-  const styleEl = document.createElement('style');
-  styleEl.textContent = langStyles;
-  document.head.appendChild(styleEl);
+  window.addEventListener('DOMContentLoaded', () => {
+    window.i18n = new I18n();
+
+    const styleEl = document.createElement('style');
+    styleEl.textContent = langStyles;
+    document.head.appendChild(styleEl);
+  });
 }

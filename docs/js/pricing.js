@@ -106,18 +106,15 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // Listen for language changes
-  const observer = new MutationObserver(() => {
+// When language changes, refresh option labels + estimate
+  window.addEventListener('limviz-lang-change', () => {
     updateSelectOptions();
     updateEstimate();
   });
-  
-  observer.observe(document.body, { 
-    childList: true, 
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['data-lang']
-  });
 
+  // If you care about currency change for the estimate (optional, since setCurrency already calls updateEstimate)
+  window.addEventListener('limviz-currency-change', () => {
+    updateEstimate();
+  });
   updateSelectOptions();
 });
