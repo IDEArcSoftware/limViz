@@ -217,7 +217,7 @@ const translations = {
 };
 
 // Currency conversion rates (EUR to TRY)
-const EUR_TO_TRY = 37.5; // Update this rate as needed
+const EUR_TO_TRY = 49.0; // Update this rate as needed
 
 class I18n {
   constructor() {
