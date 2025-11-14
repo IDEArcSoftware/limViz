@@ -227,33 +227,28 @@ class I18n {
   }
 
   detectLanguage() {
-    // Check localStorage first
     let saved = null;
-  try {
-    saved = localStorage.getItem('limviz-lang');
-  } catch (e) {
-    // localStorage not available, ignore
-  }
-  if (saved && translations[saved]) return saved;
-    
-    // Check browser language
+    try {
+      saved = localStorage.getItem('limviz-lang');
+    } catch (e) {
+      // localStorage not available, ignore
+    }
+    if (saved && translations[saved]) return saved;
+
     const browserLang = navigator.language.toLowerCase();
     if (browserLang.startsWith('tr')) return 'tr';
-    
+
     return 'en';
   }
 
   detectCurrency() {
-    // Check localStorage first
     let saved = null;
-  try {
-    saved = localStorage.getItem('limviz-currency');
-  } catch (e) {}
-  if (saved && (saved === 'EUR' || saved === 'TRY')) return saved;
-    
-    // If Turkish language, default to TRY
+    try {
+      saved = localStorage.getItem('limviz-currency');
+    } catch (e) {}
+    if (saved && (saved === 'EUR' || saved === 'TRY')) return saved;
+
     if (this.currentLang === 'tr') return 'TRY';
-    
     return 'EUR';
   }
 
@@ -307,27 +302,25 @@ class I18n {
   setCurrency(currency) {
     if (currency !== 'EUR' && currency !== 'TRY') return;
 
-  this.currentCurrency = currency;
-  try {
-    localStorage.setItem('limviz-currency', currency);
-  } catch (e) {}
+    this.currentCurrency = currency;
+    try {
+      localStorage.setItem('limviz-currency', currency);
+    } catch (e) {}
 
-  document.querySelectorAll('.currency-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.currency === currency);
-  });
+    document.querySelectorAll('.currency-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.currency === currency);
+    });
 
-  this.updatePrices();
+    this.updatePrices();
 
-  // Keep your existing logic:
-  if (typeof updateEstimate === 'function') {
-    updateEstimate();
+    if (typeof updateEstimate === 'function') {
+      updateEstimate();
+    }
+
+    // (optional) notify listeners
+    window.dispatchEvent(new CustomEvent('limviz-currency-change', { detail: { currency } }));
   }
 
-  // 🔔 also emit an event if you ever need it
-  window.dispatchEvent(new CustomEvent('limviz-currency-change', {
-    detail: { currency }
-  }));
-  }
 
   convertPrice(eurPrice) {
     if (this.currentCurrency === 'TRY') {
@@ -352,25 +345,24 @@ class I18n {
     });
   }
 
-  setLanguage(lang) {
+    setLanguage(lang) {
     if (!translations[lang]) return;
 
-  this.currentLang = lang;
-  try {
-    localStorage.setItem('limviz-lang', lang);
-  } catch (e) {}
+    this.currentLang = lang;
+    try {
+      localStorage.setItem('limviz-lang', lang);
+    } catch (e) {}
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
 
-  this.translate();
+    this.translate();
 
-  // 🔔 notify listeners (like pricing.js)
-  window.dispatchEvent(new CustomEvent('limviz-lang-change', {
-    detail: { lang }
-  }));
+    // (optional) notify pricing.js
+    window.dispatchEvent(new CustomEvent('limviz-lang-change', { detail: { lang } }));
   }
+
 
   t(key) {
     return translations[this.currentLang][key] || translations.en[key] || key;
@@ -445,7 +437,19 @@ const langStyles = `
 
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
-    window.i18n = new I18n();
+    try {
+      window.i18n = new I18n();
+    } catch (e) {
+      console.error('Failed to initialize i18n, falling back to defaults:', e);
+      window.i18n = {
+        currentLang: 'en',
+        currentCurrency: 'EUR',
+        t: key => (translations.en && translations.en[key]) || key,
+        convertPrice: p => p,
+        formatPrice: p => '€' + Number(p).toLocaleString('en-US', { maximumFractionDigits: 0 }),
+        updatePrices: () => {}
+      };
+    }
 
     const styleEl = document.createElement('style');
     styleEl.textContent = langStyles;
