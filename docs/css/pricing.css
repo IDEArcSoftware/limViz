@@ -92,4 +92,49 @@ details summary{cursor:pointer;padding:10px;background:var(--glass);border-radiu
 @media (max-width:900px){
   .pricing-grid{grid-template-columns:repeat(1,1fr)}
   .calculator form{grid-template-columns:1fr}
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .lang-toggle, .currency-toggle {
+    margin-left: 0;
+    margin-top: 8px;
+  }
 }
+
+/* Add these styles to your existing pricing.css file */
+
+/* Language and Currency Toggle Styles */
+.lang-toggle, .currency-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 18px;
+  background: rgba(255,255,255,0.03);
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.lang-btn, .currency-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.lang-btn:hover, .currency-btn:hover {
+  color: #e6eef6;
+}
+
+.lang-btn.active, .currency-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
